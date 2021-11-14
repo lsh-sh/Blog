@@ -19,4 +19,6 @@ public interface LoginService {
      * @return
      */
     SysUser checkToken(String token);
+
+    Result logout(String token);
 }
