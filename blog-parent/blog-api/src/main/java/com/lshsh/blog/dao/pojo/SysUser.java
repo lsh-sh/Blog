@@ -1,10 +1,15 @@
 package com.lshsh.blog.dao.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class SysUser {
 
+//    @TableId(type = IdType.AUTO) //根据数据库自增id
+//    @TableId(type = IdType.ASSIGN_ID) //雪花算法生成id
     private Long id;
 
     private String account;

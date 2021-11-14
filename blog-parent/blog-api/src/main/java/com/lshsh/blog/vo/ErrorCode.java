@@ -9,6 +9,7 @@ public enum ErrorCode {
 
     NO_PERMISSION(70001, "无访问权限"),
 
+    ACCOUNT_EXIST(10004, "账号已存在"),
 
     SESSION_TIME_OUT(90001, "会话超时"),
 

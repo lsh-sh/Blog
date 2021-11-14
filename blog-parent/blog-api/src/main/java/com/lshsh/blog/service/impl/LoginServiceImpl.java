@@ -13,11 +13,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Transactional //添加事务注解，失败进行回滚
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
@@ -76,5 +78,34 @@ public class LoginServiceImpl implements LoginService {
     public Result logout(String token) {
         redisTemplate.delete("TOEKN_" + token);
         return Result.success(null);
+    }
+
+    @Override
+    public Result register(LoginParam loginParam) {
+        //检查参数的合法性
+        String account = loginParam.getAccount();
+        String nickname = loginParam.getNickname();
+        String password = loginParam.getPassword();
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(nickname) || StringUtils.isBlank(password)) {
+            return Result.fail(ErrorCode.PARAMS_ERROR);
+        }
+        //查询长号是否已存在
+        SysUser sysUser = sysUserService.findUserByAccount(account);
+        if (sysUser != null) {
+            return Result.fail(ErrorCode.ACCOUNT_EXIST);
+        }
+        //保存到数据库
+        sysUser = new SysUser();
+        sysUser.setNickname(nickname);
+        sysUser.setAccount(account);
+        sysUser.setPassword(DigestUtils.md5Hex(password + slat));
+        sysUser.setLastLogin(System.currentTimeMillis());
+        sysUser.setCreateDate(System.currentTimeMillis());
+        sysUserService.save(sysUser);
+        //生成token
+        String token = JWTUtils.createToken(sysUser.getId());
+        //将token存入redis
+        redisTemplate.opsForValue().set("TOEKN_" + token, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
+        return Result.success(token);
     }
 }

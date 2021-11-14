@@ -9,6 +9,7 @@ public interface SysUserService {
 
     /**
      * 根据账号和密码查找用户
+     *
      * @param account
      * @param pwd
      * @return
@@ -17,8 +18,24 @@ public interface SysUserService {
 
     /**
      * 通过token获取用户信息
+     *
      * @param token
      * @return
      */
     Result getUserInfoByToken(String token);
+
+    /**
+     * 通过账号查找用户
+     *
+     * @param account
+     * @return
+     */
+    SysUser findUserByAccount(String account);
+
+    /**
+     * 保存用户信息
+     *
+     * @param sysUser
+     */
+    void save(SysUser sysUser);
 }

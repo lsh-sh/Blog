@@ -51,4 +51,16 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, loginUserVo);
         return Result.success(loginUserVo);
     }
+
+    @Override
+    public SysUser findUserByAccount(String account) {
+        LambdaQueryWrapper<SysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(SysUser::getAccount, account);
+        return sysUserMapper.selectOne(lambdaQueryWrapper);
+    }
+
+    @Override
+    public void save(SysUser sysUser) {
+        sysUserMapper.insert(sysUser);
+    }
 }
