@@ -21,4 +21,8 @@ public class Result {
     public static Result fail(int code, String msg) {
         return new Result(false, code, msg, null);
     }
+
+    public static Result fail(ErrorCode errorCode) {
+        return fail(errorCode.getCode(), errorCode.getMsg());
+    }
 }

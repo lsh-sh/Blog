@@ -5,7 +5,10 @@ public enum ErrorCode {
 
     ACCOUNT_PWD_NOT_EXIST(10002, "用户名或密码不存在"),
 
+    TOKEN_ERROR(10003, "token不合法"),
+
     NO_PERMISSION(70001, "无访问权限"),
+
 
     SESSION_TIME_OUT(90001, "会话超时"),
 

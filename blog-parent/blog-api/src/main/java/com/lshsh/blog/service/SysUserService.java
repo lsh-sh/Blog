@@ -1,6 +1,7 @@
 package com.lshsh.blog.service;
 
 import com.lshsh.blog.dao.pojo.SysUser;
+import com.lshsh.blog.vo.Result;
 
 public interface SysUserService {
 
@@ -13,4 +14,11 @@ public interface SysUserService {
      * @return
      */
     SysUser findUser(String account, String pwd);
+
+    /**
+     * 通过token获取用户信息
+     * @param token
+     * @return
+     */
+    Result getUserInfoByToken(String token);
 }

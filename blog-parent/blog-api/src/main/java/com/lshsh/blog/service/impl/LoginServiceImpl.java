@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -51,9 +52,23 @@ public class LoginServiceImpl implements LoginService {
         return Result.success(token);
     }
 
+    @Override
+    public SysUser checkToken(String token) {
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        Map<String, Object> map = JWTUtils.checkToken(token);
+        if (map == null) {
+            return null;
+        }
 
-    public static void main(String[] args) {
-        String pwd = DigestUtils.md5Hex("amdin" + slat);
-        System.out.println(pwd);
+        String jsonString = redisTemplate.opsForValue().get("TOEKN_" + token);
+        if (StringUtils.isBlank(jsonString)) {
+            return null;
+        }
+
+        SysUser sysUser = JSON.parseObject(jsonString, SysUser.class);
+
+        return sysUser;
     }
 }
